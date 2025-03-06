@@ -72,9 +72,11 @@
           margin: 0;
           letter-spacing: 1rem;
           transform: translate3d(0, 0, 0vmin);
-          --x: calc(50% + (var(--swing-x) * 0.5) * 1%);
-          background: radial-gradient(var(--lit-header), var(--header) 45%) var(--x)
-            100%/200% 200%;
+          --x: calc(var(--swing-x) * 1%);
+          --y: calc(var(--swing-y) * 1%);
+          background: radial-gradient(circle at var(--x) var(--y), 
+                    var(--lit-header), var(--header) 45%) 
+                    50% 50%/200% 200%;
           -webkit-background-clip: text;
           color: transparent;
         }
@@ -87,18 +89,18 @@
           filter: blur(1.5vmin);
           transform: scale(1.05) translate3d(0, 12%, -10vmin)
             translate(
-              calc((var(--swing-x) * 0.05) * 1%),
-              calc((var(--swing-y) * -0.025) * 1%)
+              calc(var(--swing-x) * 0.05px),
+              calc(var(--swing-y) * -0.025px)
             );
         }
         
         .cloak {
           height: 100%;
           width: 100%;
-          transform-origin: 50% 25%;
-          transform: rotate(calc(var(--swing-x) * -0.25deg));
+          transform-origin: 50% 50%;
+          transform: rotate(calc(var(--swing-x) * -0.02deg));
           background: radial-gradient(
-            40% 40% at 50% calc(42% + (var(--swing-y) * 0.01%)),
+            circle at calc(50% + var(--swing-x) * 0.3%) calc(50% + var(--swing-y) * 0.3%),
             transparent,
             hsl(0 0% 2% / 0.94) 38vmax
           );
@@ -137,9 +139,10 @@
         }
         
         .info p {
-          --x: calc(50% + (var(--swing-x) * 0.5) * 1%);
+          --x: calc(var(--swing-x) * 1%);
+          --y: calc(var(--swing-y) * 1%);
           background: radial-gradient(
-            50% 250% at var(--x) -50%,
+            circle at var(--x) var(--y),
             color-mix(in lch, canvasText, transparent 25%),
             color-mix(in lch, canvasText, transparent 75%)
           );
@@ -168,9 +171,13 @@
           position: relative;
           transform-style: preserve-3d;
           transform: translate3d(0, 0, 40px);
-          --x: calc(50% + (var(--swing-x) * 0.5) * 1%);
-          background: radial-gradient(var(--lit-header), rgba(255, 255, 255, 0.4) 45%) var(--x)
-            100%/200% 200%;
+          --x: calc(var(--swing-x) * 1%);
+          --y: calc(var(--swing-y) * 1%);
+          background: radial-gradient(
+            circle at var(--x) var(--y), 
+            var(--lit-header), 
+            rgba(255, 255, 255, 0.4) 45%
+          );
           -webkit-background-clip: text;
           color: transparent;
         }
@@ -194,8 +201,8 @@
           padding: 0.75rem 4rem;
           transform: translate3d(0, 0, -40px) 
             translate(
-              calc((var(--swing-x) * 0.05) * 1%),
-              calc((var(--swing-y) * 0.025) * 1%)
+              calc(var(--swing-x) * 0.05px),
+              calc(var(--swing-y) * 0.025px)
             );
           transition: all 0.3s ease;
           backface-visibility: hidden;
@@ -208,8 +215,8 @@
         .button-wrapper:hover .linkedin-shadow {
           transform: translate3d(0, 7px, -40px)
             translate(
-              calc((var(--swing-x) * 0.07) * 1%),
-              calc((var(--swing-y) * 0.04) * 1%)
+              calc(var(--swing-x) * 0.07px),
+              calc(var(--swing-y) * 0.04px)
             );
           filter: blur(6px);
         }
@@ -221,8 +228,8 @@
         .button-wrapper:active .linkedin-shadow {
           transform: translate3d(0, 2px, -40px)
             translate(
-              calc((var(--swing-x) * 0.05) * 1%),
-              calc((var(--swing-y) * 0.025) * 1%)
+              calc(var(--swing-x) * 0.05px),
+              calc(var(--swing-y) * 0.025px)
             );
         }
         
@@ -265,8 +272,6 @@
         }
         
         .button-wrapper {
-          opacity: 0;
-          transform: scale(0);
           position: relative;
           transform-style: preserve-3d;
           perspective: 500px;
@@ -302,15 +307,6 @@
         >
         <span class="linkedin-shadow" aria-hidden="true">CHECK THIS INSTEAD</span>
       </div>
-      
-      <script>
-        document.addEventListener('DOMContentLoaded', function() {
-          setTimeout(() => {
-            const button = document.querySelector('.button-wrapper');
-            button.style.animation = 'popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards';
-          }, 1000); 
-        });
-      </script>
     </div>
 
     <script>
@@ -321,8 +317,8 @@
             cursor.style.left = e.clientX + 'px';
             cursor.style.top = e.clientY + 'px';
             
-            const x = (e.clientX / window.innerWidth - 0.5) * 200; // -100 to 100 range
-            const y = (e.clientY / window.innerHeight - 0.5) * 200; // -100 to 100 range
+            const x = (e.clientX / window.innerWidth) * 200 - 100; 
+            const y = (e.clientY / window.innerHeight) * 200 - 100; 
             
             document.documentElement.style.setProperty('--swing-x', x);
             document.documentElement.style.setProperty('--swing-y', y);
@@ -343,15 +339,14 @@
             if (e.touches.length > 0) {
                 const touch = e.touches[0];
                 
-                const x = (touch.clientX / window.innerWidth - 0.5) * 200;
-                const y = (touch.clientY / window.innerHeight - 0.5) * 200;
+                const x = (touch.clientX / window.innerWidth) * 200 - 100;
+                const y = (touch.clientY / window.innerHeight) * 200 - 100;
                 
                 document.documentElement.style.setProperty('--swing-x', x);
                 document.documentElement.style.setProperty('--swing-y', y);
             }
         });
         
-        // Make the page accessible for keyboard users too
         let mouseActive = false;
         
         document.addEventListener('mousemove', () => {
