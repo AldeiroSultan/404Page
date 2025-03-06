@@ -233,29 +233,12 @@
             );
         }
         
-        /* Custom cursor */
-        .cursor {
-          position: fixed;
-          width: 20px;
-          height: 20px;
-          border-radius: 50%;
-          background: white;
-          mix-blend-mode: difference;
-          pointer-events: none;
-          transform: translate(-50%, -50%);
-          transition: width 0.3s, height 0.3s;
-          z-index: 9999;
-        }
-        
-        .cursor.hover {
-          width: 40px;
-          height: 40px;
-        }
-        
+        /* Links should have a visible hover state */
         a:hover {
           opacity: 0.8;
         }
         
+        /* Button pop-in animation */
         @keyframes popIn {
           0% {
             transform: scale(0);
@@ -279,9 +262,6 @@
     </style>
 </head>
 <body>
-    <!-- Custom cursor element -->
-    <div class="cursor"></div>
-    
     <h1>
       404
       <span aria-hidden="true">404</span>
@@ -310,31 +290,14 @@
     </div>
 
     <script>
-        const cursor = document.querySelector('.cursor');
-        
-        // Track mouse position
         document.addEventListener('mousemove', (e) => {
-            cursor.style.left = e.clientX + 'px';
-            cursor.style.top = e.clientY + 'px';
-            
-            const x = (e.clientX / window.innerWidth) * 200 - 100; 
-            const y = (e.clientY / window.innerHeight) * 200 - 100; 
+            const x = (e.clientX / window.innerWidth) * 200 - 100;
+            const y = (e.clientY / window.innerHeight) * 200 - 100;
             
             document.documentElement.style.setProperty('--swing-x', x);
             document.documentElement.style.setProperty('--swing-y', y);
         });
-        
-        const links = document.querySelectorAll('a');
-        links.forEach(link => {
-            link.addEventListener('mouseenter', () => {
-                cursor.classList.add('hover');
-            });
-            link.addEventListener('mouseleave', () => {
-                cursor.classList.remove('hover');
-            });
-        });
-        
-        // Handle touch devices
+
         document.addEventListener('touchmove', (e) => {
             if (e.touches.length > 0) {
                 const touch = e.touches[0];
